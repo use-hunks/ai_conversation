@@ -31,6 +31,8 @@ $ git push
 $ git checkout {ブランチ名}
 # 対象ブランチを新規作成し、切り替える
 $ git checkout -b {ブランチ名}
+# 作成したブランチをリモートにプッシュする
+$ git push -u origin {ブランチ名}
 # ワークツリーにある対象ファイルの変更を取り消す
 $ git checkout {ファイルパス}
 # 最新の履歴を取得する
