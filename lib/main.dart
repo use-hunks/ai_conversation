@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
+import 'dart:io';
 
 void main() {
   runApp(const MyApp());
@@ -32,18 +33,52 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  static const tokenKey = 'OPENAI_API_KEY';
+  late final String token;
+  late final OpenAI openAI;
+  _MyHomePageState() {
+    // コンストラクター内でtokenとopenAIを初期化
+    token = Platform.environment[tokenKey] ?? '';
+    openAI = OpenAI.instance.build(
+      token: token,
+      baseOption: HttpSetup(receiveTimeout: const Duration(seconds: 20)),
+    );
+  }
+  String content = 'What should I do for developing my app using flutter?';
+  
+  late Future<String> responseText;
+  @override
+  void initState(){
+    super.initState();
+    responseText = Future(
+      ()async{
+        final response = await openAI.onChatCompletion(
+          request: ChatCompleteText(
+            model: GptTurboChatModel(),
+            messages: [ 
+              Messages(
+                role: Role.system,
+                content : content,
+              ).toJson(),
+            ],
+            maxToken: 100,
+          ),
+       );
+       return response?.choices.last.message?.content ?? ''; 
+      }
+    );
+  }
+
   int _counter = 0;
 
   void _incrementCounter() {
     setState(() {
-      
       _counter++;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-  
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -52,18 +87,28 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            
-            Column(
-              children: [
-                const Text(
-                  'You have pushed the button this many times:',
-                ),
-                const Text(
-                  "test"
-                ),
-                
-                
-              ],
+            FutureBuilder<String>(
+              future: responseText,
+              builder: (context, snapshot){
+                if(snapshot.hasData){
+                  return Text(snapshot.data ?? '');
+                }
+                if(snapshot.connectionState == ConnectionState.waiting){
+                  return CircularProgressIndicator();
+                }else if(snapshot.hasError){
+                  return Text('Error: ${snapshot.error}');
+                }else{
+                  return Text(
+                    snapshot.data ?? '',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16),
+                  );
+                }
+              }
+            ),
+            const SizedBox(height: 20),
+            Text(
+               'You have pushed the button this many times:'
             ),
             Text(
               '$_counter',
