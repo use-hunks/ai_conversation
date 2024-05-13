@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
 import 'dart:io';
+import 'next_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Talk with CHUPPY'),
     );
   }
 }
@@ -63,8 +64,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
             maxToken: 100,
           ),
-       );
-       return response?.choices.last.message?.content ?? ''; 
+      );
+      return response?.choices.last.message?.content ?? ''; 
       }
     );
   }
@@ -91,7 +92,13 @@ class _MyHomePageState extends State<MyHomePage> {
               future: responseText,
               builder: (context, snapshot){
                 if(snapshot.hasData){
-                  return Text(snapshot.data ?? '');
+                  return Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.blue),
+                    ),
+                    child:Text(snapshot.data ?? ''),
+                  );
                 }
                 if(snapshot.connectionState == ConnectionState.waiting){
                   return CircularProgressIndicator();
@@ -106,9 +113,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
               }
             ),
+            ElevatedButton(
+              onPressed: (){
+                 // ここにボタンを押した時に呼ばれるコードを書く
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NextPage()),
+            );
+              }, 
+              child: Text('START')),
             const SizedBox(height: 20),
             Text(
-               'You have pushed the button this many times:'
+              'You have pushed the button this many times:'
             ),
             Text(
               '$_counter',
