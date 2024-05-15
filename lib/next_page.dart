@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
-import 'dart:io';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class NextPage extends StatefulWidget{
   //initializer
@@ -11,14 +11,13 @@ class NextPage extends StatefulWidget{
 }
 
 class _NextPageState extends State<NextPage>{
-  static const tokenKey = 'OPENAI_API_KEY';
   late final String token;
   late final OpenAI openAI;
   late String content;
   _NextPageState(String input) {
     // コンストラクター内でtokenとopenAIを初期化
     this.content = input;
-    token = Platform.environment[tokenKey] ?? '';
+    token = dotenv.get('OPENAI_API_KEY') ?? '';
     openAI = OpenAI.instance.build(
       token: token,
       baseOption: HttpSetup(receiveTimeout: const Duration(seconds: 20)),
