@@ -1,10 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'next_page.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-Future<void> main() async{
+Future<void> main() async {
   await dotenv.load(fileName: "./.env");
   runApp(const MyApp());
 }
@@ -14,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'AI CONVERSATION',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -32,61 +31,33 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  @override
+  void initState() {
+    super.initState();
   }
+
   late String userInput;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              child: TextField(
-                textAlign: TextAlign.center,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Enter a sentence'
-                ),
-                onChanged: (text){
-                  userInput = text;
-                },
-              )
-            ),
-            ElevatedButton(
-              child: Text('START'),
-              onPressed: (){
-                 // ここにボタンを押した時に呼ばれるコードを書く
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => NextPage(userInput)),
-                );
-              }, 
-            ),
-            const SizedBox(height: 20),
-            Text(
-              'You have pushed the button this many times:'
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+        appBar: AppBar(
+          title: Text(widget.title),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), 
-    );
+        body: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+              ElevatedButton(
+                child: Text('START'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NextPage()),
+                  );
+                },
+              ),
+            ])));
   }
 }
