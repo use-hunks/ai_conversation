@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class NextPage extends StatefulWidget {
   //initializer
@@ -16,6 +16,9 @@ class _NextPageState extends State<NextPage> {
   bool _speechEnabled = false;
   String _wordsSpoken = "";
   double _confidenceLevel = 0;
+
+  //tts
+  FlutterTts flutterTts = FlutterTts();
 
   //gpt
   late final String token;
@@ -39,24 +42,21 @@ class _NextPageState extends State<NextPage> {
     super.initState();
     initSpeech();
   }
-
+  //stt
   void initSpeech() async {
     _speechEnabled = await _speechToText.initialize(debugLogging: true);
     setState(() {});
   }
-
   void _startListening() async {
     await _speechToText.listen(onResult: _onSpeechResult);
     setState(() {
       _confidenceLevel = 0;
     });
   }
-
   void _stopListening() async {
     await _speechToText.stop();
     setState(() {});
   }
-
   void _onSpeechResult(result) {
     setState(() {
       _wordsSpoken = result.recognizedWords;
@@ -70,8 +70,7 @@ class _NextPageState extends State<NextPage> {
         model: GptTurboChatModel(),
         messages: [
           Messages(
-            role: Role.user,
-            content: input,
+            role: Role.user, content: input,
           ).toJson(),
         ],
         maxToken: 100,
@@ -81,83 +80,119 @@ class _NextPageState extends State<NextPage> {
       _response = response?.choices.last.message?.content ?? "";
     });
   }
+
+  //tts
+  void _speak(text) async {
+    await flutterTts.setLanguage("en-US");
+    await flutterTts.setPitch(1);
+    await flutterTts.setSpeechRate(0.9);//0~1
+    //await flutterTts.setVoice({"name": "en-us-x-sfg#male_1-local", "locale": "en-US"});
+    await flutterTts.speak(text);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.grey,
-          title: Text('CHAPPIE'),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                  child: TextField(
-                    textAlign: TextAlign.center,
-                    decoration: InputDecoration(
-                        border: InputBorder.none, 
-                        hintText: 'Enter a sentence'
-                        ),
-                    onChanged: (text) {
-                      userInput = text;
-                    },
-                    onSubmitted: (text){
-                      _getChatGPTResponse(text);
-                    },
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        title: Text('CHAPPIE'),
+      ),
+      body: Center(
+        child: Column(
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.all(16),
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Colors.blue),
+                    ),
+                    child: Text(
+                      _response ?? '',
+                      style: TextStyle(fontSize: 20),
+                    ),
                   ),
-                ),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.blue),
-                ),
-                child: Text(_response ?? ''),
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.all(16),
+                      child: Text(
+                        _wordsSpoken,
+                        style: const TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.w300,
+                        ),
                       ),
-              Container(
-                padding: EdgeInsets.all(16),
-                child: Text(
-                  _speechToText.isListening
-                      ? "Listening..."
-                      : _speechEnabled
+                    )
+                  ),
+                  if(_speechToText.isNotListening && _confidenceLevel > 0)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 100),
+                      child: Text(
+                        "Confidence: ${(_confidenceLevel * 100).toStringAsFixed(1)}%",
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w200,
+                        ),
+                      )
+                    ),
+                  Container(
+                    padding: EdgeInsets.all(16),
+                    child: Text(
+                      _speechToText.isListening
+                        ? "Listening..."
+                        : _speechEnabled
                           ? "Tap the microphone to start listening..."
                           : "Speech not available",
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
-              Expanded(
-                  child: Container(
-                padding: EdgeInsets.all(16),
-                child: Text(
-                  _wordsSpoken,
-                  style: const TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w300,
+                      style: TextStyle(fontSize: 20),
+                    ),
                   ),
-                ),
-              )),
-              if (_speechToText.isNotListening && _confidenceLevel > 0)
-                Padding(
-                    padding: const EdgeInsets.only(bottom: 100),
+                  ElevatedButton(
+                    onPressed:() => _speak(_response),//ここに話したい言葉を入れる 
                     child: Text(
-                      "Confidence: ${(_confidenceLevel * 100).toStringAsFixed(1)}%",
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w200,
-                      ),
-                    )),
-            ],
-          ),
+                      "Tap to say",
+                    )
+                  )
+                ],
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.black, width: 5),
+                color: Colors.white,
+              ),
+              height: 80,
+              alignment: Alignment.bottomCenter,
+              child: TextField(
+                textAlign: TextAlign.center,
+                decoration: InputDecoration(
+                  border: InputBorder.none, hintText: 'Enter a sentence'
+                ),
+                onChanged: (text) {
+                  userInput = text;
+                },
+                onSubmitted: (text) {
+                  _getChatGPTResponse(text);
+                },
+              ),
+            ),
+          ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed:
-              _speechToText.isListening ? _stopListening : _startListening,
-          tooltip: 'Listen',
-          child: Icon(
-            _speechToText.isNotListening ? Icons.mic_off : Icons.mic,
-            color: Colors.white,
-          ),
-          backgroundColor: Colors.black,
-        ));
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.black,
+        onPressed:
+            _speechToText.isListening ? _stopListening : _startListening,
+        tooltip: 'Listen',
+        child: Icon(
+          _speechToText.isNotListening ? Icons.mic_off : Icons.mic,
+          color: Colors.white,
+        ),
+      )
+    );
   }
 }

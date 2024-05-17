@@ -36,28 +36,38 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
   }
 
-  late String userInput;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        body: Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-              ElevatedButton(
-                child: Text('START'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => NextPage()),
-                  );
-                },
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Welcome to AI Conversation',
+              style: TextStyle(
+                fontSize: 24, 
+                fontWeight: FontWeight.bold
               ),
-            ])));
+            ),
+            SizedBox(height: 20,),
+            ElevatedButton(
+              child: Text('START'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NextPage()),
+                );
+              },
+            ),
+          ]
+        )
+      )
+    );
   }
 }
