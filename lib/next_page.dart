@@ -64,20 +64,30 @@ class _NextPageState extends State<NextPage> {
     });
   }
   //gpt
+  List<Messages> messageHistory = [
+    Messages(
+      role: Role.system,
+      content: "You are an AI English teacher. Users will talk about something in English. You should talk about it to get the conversation going. Please keep note that you should reply in a couple of friendly sentences. "
+    )
+  ];
+  
+  void addMessage(Role role, String content){
+    messageHistory.add(Messages(role: role, content: content));
+  }
+
   void _getChatGPTResponse(String input) async{
+    addMessage(Role.user, input);
+    final messageJson = messageHistory.map((message) => message.toJson()).toList();
     final response = await openAI.onChatCompletion(
       request: ChatCompleteText(
         model: GptTurboChatModel(),
-        messages: [
-          Messages(
-            role: Role.user, content: input,
-          ).toJson(),
-        ],
+        messages: messageJson,
         maxToken: 100,
       ),
     );
     setState(() {
       _response = response?.choices.last.message?.content ?? "";
+      addMessage(Role.assistant, _response);
     });
   }
 
@@ -85,7 +95,7 @@ class _NextPageState extends State<NextPage> {
   void _speak(text) async {
     await flutterTts.setLanguage("en-US");
     await flutterTts.setPitch(1);
-    await flutterTts.setSpeechRate(0.9);//0~1
+    await flutterTts.setSpeechRate(0.5);//0~1
     //await flutterTts.setVoice({"name": "en-us-x-sfg#male_1-local", "locale": "en-US"});
     await flutterTts.speak(text);
   }
