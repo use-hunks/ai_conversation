@@ -61,6 +61,7 @@ class _NextPageState extends State<NextPage> {
     setState(() {
       _wordsSpoken = result.recognizedWords;
       _confidenceLevel = result.confidence;
+      addMessage(Role.user, _wordsSpoken);
     });
   }
   //gpt
@@ -114,6 +115,7 @@ class _NextPageState extends State<NextPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  //gptのresponse表示
                   Container(
                     margin: EdgeInsets.all(16),
                     padding: EdgeInsets.all(5),
@@ -126,6 +128,7 @@ class _NextPageState extends State<NextPage> {
                       style: TextStyle(fontSize: 20),
                     ),
                   ),
+                  //音声入力の表示
                   Expanded(
                     child: Container(
                       padding: EdgeInsets.all(16),
@@ -138,6 +141,7 @@ class _NextPageState extends State<NextPage> {
                       ),
                     )
                   ),
+                  //音声入力のconfidenceの表示
                   if(_speechToText.isNotListening && _confidenceLevel > 0)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 100),
@@ -149,6 +153,7 @@ class _NextPageState extends State<NextPage> {
                         ),
                       )
                     ),
+                  //マイク権限の状態の表示
                   Container(
                     padding: EdgeInsets.all(16),
                     child: Text(
@@ -160,6 +165,7 @@ class _NextPageState extends State<NextPage> {
                       style: TextStyle(fontSize: 20),
                     ),
                   ),
+                  //音声出力
                   ElevatedButton(
                     onPressed:() => _speak(_response),//ここに話したい言葉を入れる 
                     child: Text(
@@ -169,6 +175,7 @@ class _NextPageState extends State<NextPage> {
                 ],
               ),
             ),
+            //テキスト入力
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -193,10 +200,11 @@ class _NextPageState extends State<NextPage> {
           ],
         ),
       ),
+      //音声入力
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.black,
         onPressed:
-            _speechToText.isListening ? _stopListening : _startListening,
+          _speechToText.isListening ? _stopListening : _startListening,
         tooltip: 'Listen',
         child: Icon(
           _speechToText.isNotListening ? Icons.mic_off : Icons.mic,
