@@ -1,23 +1,21 @@
-import 'package:ai_conversation/view_model/conversations_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
-class NextPage extends StatefulWidget {
-  const NextPage({super.key});
+class ChatView extends StatefulWidget {
+  const ChatView({super.key});
 
   @override
-  _NextPageState createState() => _NextPageState();
+  State<ChatView> createState() => _ChatViewState();
 }
 
-class _NextPageState extends State<NextPage> {
+class _ChatViewState extends State<ChatView> {
   //stt
   final SpeechToText _speechToText = SpeechToText();
   bool _speechEnabled = false;
   String _wordsSpoken = "";
-  double _confidenceLevel = 0;
 
   //tts
   FlutterTts flutterTts = FlutterTts();
@@ -30,7 +28,7 @@ class _NextPageState extends State<NextPage> {
   String userInput = "";
   final TextEditingController _controller = TextEditingController();
 
-  _NextPageState() {
+  _ChatViewState() {
     // コンストラクター内でtokenとopenAIを初期化
     token = dotenv.get('OPENAI_API_KEY');
     openAI = OpenAI.instance.build(
@@ -55,7 +53,6 @@ class _NextPageState extends State<NextPage> {
   void _startListening() async {
     await _speechToText.listen(onResult: _onSpeechResult);
     setState(() {
-      _confidenceLevel = 0;
     });
   }
 
@@ -67,7 +64,6 @@ class _NextPageState extends State<NextPage> {
   void _onSpeechResult(result) {
     setState(() {
       _wordsSpoken = result.recognizedWords;
-      _confidenceLevel = result.confidence;
       addMessage(Role.user, _wordsSpoken);
     });
   }
@@ -134,7 +130,7 @@ class _NextPageState extends State<NextPage> {
                         border: Border.all(color: Colors.blue),
                       ),
                       child: Text(
-                        _response ?? '',
+                        _response,
                         style: const TextStyle(fontSize: 20),
                       ),
                     ),

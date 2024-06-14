@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ai_conversation/next_page.dart';
+import 'package:ai_conversation/view/chat_view.dart';
 
 class StartPageView extends StatelessWidget{
   const StartPageView({super.key, required this.title});
@@ -28,7 +28,7 @@ class StartPageView extends StatelessWidget{
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => NextPage()),
+                  MaterialPageRoute(builder: (context) => const ChatView()),
                 );
               },
             ),
