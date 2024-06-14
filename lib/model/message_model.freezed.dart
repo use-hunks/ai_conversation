@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$MessageModel {
   int get id => throw _privateConstructorUsedError;
+  Role get role => throw _privateConstructorUsedError;
   String get body => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -30,7 +31,7 @@ abstract class $MessageModelCopyWith<$Res> {
           MessageModel value, $Res Function(MessageModel) then) =
       _$MessageModelCopyWithImpl<$Res, MessageModel>;
   @useResult
-  $Res call({int id, String body});
+  $Res call({int id, Role role, String body});
 }
 
 /// @nodoc
@@ -47,6 +48,7 @@ class _$MessageModelCopyWithImpl<$Res, $Val extends MessageModel>
   @override
   $Res call({
     Object? id = null,
+    Object? role = null,
     Object? body = null,
   }) {
     return _then(_value.copyWith(
@@ -54,6 +56,10 @@ class _$MessageModelCopyWithImpl<$Res, $Val extends MessageModel>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
+      role: null == role
+          ? _value.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as Role,
       body: null == body
           ? _value.body
           : body // ignore: cast_nullable_to_non_nullable
@@ -70,7 +76,7 @@ abstract class _$$MessageModelImplCopyWith<$Res>
       __$$MessageModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int id, String body});
+  $Res call({int id, Role role, String body});
 }
 
 /// @nodoc
@@ -85,6 +91,7 @@ class __$$MessageModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? role = null,
     Object? body = null,
   }) {
     return _then(_$MessageModelImpl(
@@ -92,6 +99,10 @@ class __$$MessageModelImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
+      role: null == role
+          ? _value.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as Role,
       body: null == body
           ? _value.body
           : body // ignore: cast_nullable_to_non_nullable
@@ -103,16 +114,19 @@ class __$$MessageModelImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$MessageModelImpl implements _MessageModel {
-  const _$MessageModelImpl({required this.id, required this.body});
+  const _$MessageModelImpl(
+      {required this.id, required this.role, required this.body});
 
   @override
   final int id;
+  @override
+  final Role role;
   @override
   final String body;
 
   @override
   String toString() {
-    return 'MessageModel(id: $id, body: $body)';
+    return 'MessageModel(id: $id, role: $role, body: $body)';
   }
 
   @override
@@ -121,11 +135,12 @@ class _$MessageModelImpl implements _MessageModel {
         (other.runtimeType == runtimeType &&
             other is _$MessageModelImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.role, role) || other.role == role) &&
             (identical(other.body, body) || other.body == body));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, body);
+  int get hashCode => Object.hash(runtimeType, id, role, body);
 
   @JsonKey(ignore: true)
   @override
@@ -136,10 +151,14 @@ class _$MessageModelImpl implements _MessageModel {
 
 abstract class _MessageModel implements MessageModel {
   const factory _MessageModel(
-      {required final int id, required final String body}) = _$MessageModelImpl;
+      {required final int id,
+      required final Role role,
+      required final String body}) = _$MessageModelImpl;
 
   @override
   int get id;
+  @override
+  Role get role;
   @override
   String get body;
   @override

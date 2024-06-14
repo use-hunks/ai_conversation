@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ConversationModel {
+  int get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   List<MessageModel> get messages => throw _privateConstructorUsedError;
 
@@ -30,7 +31,7 @@ abstract class $ConversationModelCopyWith<$Res> {
           ConversationModel value, $Res Function(ConversationModel) then) =
       _$ConversationModelCopyWithImpl<$Res, ConversationModel>;
   @useResult
-  $Res call({String title, List<MessageModel> messages});
+  $Res call({int id, String title, List<MessageModel> messages});
 }
 
 /// @nodoc
@@ -46,10 +47,15 @@ class _$ConversationModelCopyWithImpl<$Res, $Val extends ConversationModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? title = null,
     Object? messages = null,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -70,7 +76,7 @@ abstract class _$$ConversationModelImplCopyWith<$Res>
       __$$ConversationModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String title, List<MessageModel> messages});
+  $Res call({int id, String title, List<MessageModel> messages});
 }
 
 /// @nodoc
@@ -84,10 +90,15 @@ class __$$ConversationModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? title = null,
     Object? messages = null,
   }) {
     return _then(_$ConversationModelImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -104,9 +115,13 @@ class __$$ConversationModelImplCopyWithImpl<$Res>
 
 class _$ConversationModelImpl implements _ConversationModel {
   const _$ConversationModelImpl(
-      {required this.title, required final List<MessageModel> messages})
+      {required this.id,
+      required this.title,
+      required final List<MessageModel> messages})
       : _messages = messages;
 
+  @override
+  final int id;
   @override
   final String title;
   final List<MessageModel> _messages;
@@ -119,7 +134,7 @@ class _$ConversationModelImpl implements _ConversationModel {
 
   @override
   String toString() {
-    return 'ConversationModel(title: $title, messages: $messages)';
+    return 'ConversationModel(id: $id, title: $title, messages: $messages)';
   }
 
   @override
@@ -127,13 +142,14 @@ class _$ConversationModelImpl implements _ConversationModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ConversationModelImpl &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             const DeepCollectionEquality().equals(other._messages, _messages));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, title, const DeepCollectionEquality().hash(_messages));
+      runtimeType, id, title, const DeepCollectionEquality().hash(_messages));
 
   @JsonKey(ignore: true)
   @override
@@ -145,9 +161,12 @@ class _$ConversationModelImpl implements _ConversationModel {
 
 abstract class _ConversationModel implements ConversationModel {
   const factory _ConversationModel(
-      {required final String title,
+      {required final int id,
+      required final String title,
       required final List<MessageModel> messages}) = _$ConversationModelImpl;
 
+  @override
+  int get id;
   @override
   String get title;
   @override
