@@ -1,3 +1,4 @@
+import 'package:ai_conversation/view/conversation_view.dart';
 import 'package:flutter/material.dart';
 import 'package:ai_conversation/view/chat_view.dart';
 
@@ -28,7 +29,7 @@ class StartPageView extends StatelessWidget{
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const ChatView()),
+                  MaterialPageRoute(builder: (context) => const ConversationView()),
                 );
               },
             ),

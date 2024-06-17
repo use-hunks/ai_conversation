@@ -7,7 +7,7 @@ part of 'conversations_view_model.dart';
 // **************************************************************************
 
 String _$conversationsViewModelHash() =>
-    r'071091bfecdba72f7b387c5a07537a79a291c6c3';
+    r'df91f686e056e8daf6a88c6adee2f282a848043d';
 
 /// See also [ConversationsViewModel].
 @ProviderFor(ConversationsViewModel)
