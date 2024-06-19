@@ -11,29 +11,39 @@ class ConversationView extends ConsumerWidget {
     final conversationsNotifer =
         ref.read(conversationsViewModelProvider.notifier);
     final TextEditingController controller = TextEditingController();
-    String userInput = "";
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text('CHAPPIE'),
+        backgroundColor: Colors.black,
+        title: const Text('AI Conversation',
+            style: TextStyle(color: Colors.white)),
       ),
       body: Stack(alignment: Alignment.bottomCenter, children: [
-        ListView.builder(
-          itemCount: conversations[0].messages.length - 1,
-          itemBuilder: (context, index) {
-            final message = conversations[0].messages[index + 1];
-            return Card(
-              margin: index % 2 == 0
-                  ? const EdgeInsets.only(
-                      top: 5.0, left: 90.0, bottom: 5.0, right: 8.0)
-                  : const EdgeInsets.only(
-                      top: 5.0, left: 8.0, bottom: 5.0, right: 90.0),
-              child: ListTile(
-                title: Text(message.content),
-              ),
-            );
-          },
+        Container(
+          color: const Color.fromRGBO(31, 28, 57, 1.0),
+          child: ListView.builder(
+             padding: const EdgeInsets.only(bottom: 100), // 送信フォームの高さ + マージン分のパディングを追加
+            itemCount: conversations[0].messages.length - 1,
+            itemBuilder: (context, index) {
+              final message = conversations[0].messages[index + 1];
+              return Card(
+                color: index % 2 == 0
+                    ? const Color.fromRGBO(111, 97, 232, 1.0)
+                    : const Color.fromRGBO(43, 34, 81, 1.0),
+                margin: index % 2 == 0 //自分
+                    ? const EdgeInsets.only(
+                        top: 5.0, left: 90.0, bottom: 5.0, right: 8.0)
+                    : const EdgeInsets.only(
+                        top: 5.0, left: 8.0, bottom: 5.0, right: 90.0),
+                child: ListTile(
+                  title: Text(
+                    message.content,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+              );
+            },
+          ),
         ),
         //テキスト入力フォーム（下部固定）
         Container(
@@ -68,9 +78,6 @@ class ConversationView extends ConsumerWidget {
                       border: InputBorder.none,
                       hintText: 'Enter a sentence...',
                       hintStyle: TextStyle(color: Colors.white, fontSize: 20)),
-                  onChanged: (text) {
-                    userInput = text;
-                  },
                 ),
               ),
             ),
@@ -86,7 +93,7 @@ class ConversationView extends ConsumerWidget {
                 ),
                 onPressed: () => {
                       //送信してgptResponse呼び出す
-                      conversationsNotifer.getChatGPTResponse(userInput),
+                      conversationsNotifer.getChatGPTResponse(controller.text),
                       //textを消す
                       controller.clear(),
                     },

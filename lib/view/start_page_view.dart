@@ -9,30 +9,36 @@ class StartPageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.blue,
-          title: Text(title),
+          backgroundColor: Colors.black,
+          title: Text(
+            title,
+            style: const TextStyle(color: Colors.white),
+          ),
         ),
-        body: Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-              const Text(
-                'Welcome to AI Conversation',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              ElevatedButton(
-                child: const Text('START'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ConversationView()),
-                  );
-                },
-              ),
-            ])));
+        body: Container(
+          color: const Color.fromRGBO(31, 28, 57, 1.0),
+          child: Center(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                const Text(
+                  'Welcome to AI Conversation',
+                  style: TextStyle(fontSize: 24, color: Colors.white),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(
+                  child: const Text('START'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ConversationView()),
+                    );
+                  },
+                ),
+              ])),
+        ));
   }
 }

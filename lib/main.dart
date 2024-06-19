@@ -16,10 +16,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'AI CONVERSATION',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.purple,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const StartPageView(title: "Talk with CHAPPIE"),
+      home: const StartPageView(title: "AI Conversation"),
     );
   }
 }
