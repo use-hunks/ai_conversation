@@ -10,6 +10,7 @@ class ConversationView extends ConsumerWidget {
     final conversations = ref.watch(conversationsViewModelProvider);
     final conversationsNotifer =
         ref.read(conversationsViewModelProvider.notifier);
+    conversationsNotifer.initTts();
     conversationsNotifer.initStt();
     final TextEditingController controller = TextEditingController();
 
@@ -101,20 +102,24 @@ class ConversationView extends ConsumerWidget {
                     },
                 child: const Icon(Icons.send)),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-                minimumSize: const Size(50, 50),
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 16), // 必要に応じてパディングを設定
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  minimumSize: const Size(50, 50),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16), // 必要に応じてパディングを設定
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
                 ),
-              ),
-              onPressed: () => {
-                //mic関係
-              },
-              child: const Icon(Icons.mic),
-            )
+                onPressed: () => {
+                      //音声入力の開始
+                      conversationsNotifer.isListening()
+                          ? conversationsNotifer.stopListening()
+                          : {conversationsNotifer.startListening()}
+                    },
+                child: Icon(conversationsNotifer.isListening()
+                    ? Icons.mic_off
+                    : Icons.mic))
           ]),
         ),
       ]),

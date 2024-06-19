@@ -2,6 +2,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 import 'package:ai_conversation/model/message_model.dart';
 import 'package:ai_conversation/model/conversation_model.dart';
 
@@ -61,13 +63,39 @@ class ConversationsViewModel extends _$ConversationsViewModel {
 
   //tts
   FlutterTts flutterTts = FlutterTts();
-  void initStt() async {
+  Future<void> initTts() async {
     await flutterTts.setLanguage("en-US");
     await flutterTts.setPitch(1);
     await flutterTts.setSpeechRate(0.5); //0~1
   }
 
-  void speak(text) async {
+  Future<void> speak(text) async {
     await flutterTts.speak(text);
+  }
+
+//stt
+  final SpeechToText _speechToText = SpeechToText();
+  bool canSpeech = false;
+
+  Future<void> initStt() async {
+    canSpeech = await _speechToText.initialize(debugLogging: true);
+  }
+
+  bool isListening() {
+    return _speechToText.isListening;
+  }
+
+  Future<void> startListening() async {
+    await _speechToText.listen(onResult: onSpeechResult);
+  }
+
+  Future<void> stopListening() async {
+    await _speechToText.stop();
+  }
+
+  void onSpeechResult(SpeechRecognitionResult result) {
+    if (result.finalResult) {
+      getChatGPTResponse(result.recognizedWords);
+    }
   }
 }
