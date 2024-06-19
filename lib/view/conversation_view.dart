@@ -10,6 +10,7 @@ class ConversationView extends ConsumerWidget {
     final conversations = ref.watch(conversationsViewModelProvider);
     final conversationsNotifer =
         ref.read(conversationsViewModelProvider.notifier);
+    conversationsNotifer.initStt();
     final TextEditingController controller = TextEditingController();
 
     return Scaffold(
@@ -22,7 +23,8 @@ class ConversationView extends ConsumerWidget {
         Container(
           color: const Color.fromRGBO(31, 28, 57, 1.0),
           child: ListView.builder(
-             padding: const EdgeInsets.only(bottom: 100), // 送信フォームの高さ + マージン分のパディングを追加
+            padding: const EdgeInsets.only(
+                bottom: 100), // 送信フォームの高さ + マージン分のパディングを追加
             itemCount: conversations[0].messages.length - 1,
             itemBuilder: (context, index) {
               final message = conversations[0].messages[index + 1];

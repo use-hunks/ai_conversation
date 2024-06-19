@@ -61,10 +61,13 @@ class ConversationsViewModel extends _$ConversationsViewModel {
 
   //tts
   FlutterTts flutterTts = FlutterTts();
-  void speak(text) async {
+  void initStt() async {
     await flutterTts.setLanguage("en-US");
     await flutterTts.setPitch(1);
     await flutterTts.setSpeechRate(0.5); //0~1
+  }
+
+  void speak(text) async {
     await flutterTts.speak(text);
   }
 }
