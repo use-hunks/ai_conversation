@@ -1,6 +1,7 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:ai_conversation/model/message_model.dart';
 import 'package:ai_conversation/model/conversation_model.dart';
 
@@ -54,6 +55,16 @@ class ConversationsViewModel extends _$ConversationsViewModel {
     final response = await openAI.onChatCompletion(request: request);
     // レスポンスからアシスタントのメッセージを追加
     final assistantMessage = response?.choices.last.message?.content ?? "";
+    speak(assistantMessage);
     addMessage(Role.assistant, assistantMessage);
+  }
+
+  //tts
+  FlutterTts flutterTts = FlutterTts();
+  void speak(text) async {
+    await flutterTts.setLanguage("en-US");
+    await flutterTts.setPitch(1);
+    await flutterTts.setSpeechRate(0.5); //0~1
+    await flutterTts.speak(text);
   }
 }
