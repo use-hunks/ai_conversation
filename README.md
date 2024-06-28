@@ -1,19 +1,36 @@
 # ai_conversation
 
-A new Flutter project.
+# AI英会話アプリ
 
-## Getting Started
+このリポジトリは、ChatGPTのAPIを利用したAI英会話アプリのプロジェクトです。2024年4月から、研究室のプロジェクト研究Aという授業の一環として開発を進めています。
 
-This project is a starting point for a Flutter application.
+## プロジェクト概要
 
-A few resources to get you started if this is your first Flutter project:
+本プロジェクトは、音声を使った英会話アプリを開発することを目的としています。具体的には、ユーザーが英語で音声入力を行い、それをテキストに変換してChatGPTのAPIを利用して回答を得ます。その回答を音声で出力し、チャットアプリのようなUIに表示します。
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### 開発背景
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+ChatGPTがリリースされた際に、これを利用してオンライン英会話アプリを作成できるのではないかと考えました。研究室のプロジェクト研究Aという授業を通じて、先輩のサポートを得ながらこのアイデアを実現する機会を得たため、本プロジェクトを開始しました。GPT-4のリリースにより、ChatGPTはデフォルトで音声会話が可能になりましたが、当初の目的を達成するべく、独自のアプリ開発を続けています。
+
+### 使用技術
+
+- **使用言語**: Dart
+- **フレームワーク**: Flutter
+
+### アプリの流れ
+
+1. **音声入力**: ユーザーが英語で音声入力を行い、その音声をテキストに変換します。
+2. **ChatGPT API呼び出し**: 変換されたテキストをChatGPTのAPIに送信し、回答を得ます。
+3. **音声出力**: 得られた回答を音声で出力します。
+4. **UI表示**: 入力と回答をチャット形式のUIに表示します。
+
+この流れを繰り返すことで、ユーザーは自然な英会話を体験することができます。
+
+
+
+---
+
+開発中のAI英会話アプリを多くの人に役立ててもらうため、引き続き機能追加や改善を行っていきます。どうぞよろしくお願いします。
 
 ### git
 ```sh
