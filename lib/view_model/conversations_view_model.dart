@@ -86,7 +86,10 @@ class ConversationsViewModel extends _$ConversationsViewModel {
   }
 
   Future<void> startListening() async {
-    await _speechToText.listen(onResult: onSpeechResult);
+    await _speechToText.listen(
+      onResult: onSpeechResult,
+      localeId: "en_US"
+    );
   }
 
   Future<void> stopListening() async {
