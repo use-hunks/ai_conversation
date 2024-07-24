@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
-import 'package:flutter_tts/flutter_tts.dart';
+import 'package:wavenet/wavenet.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:ai_conversation/model/message_model.dart';
@@ -21,7 +23,7 @@ class ConversationsViewModel extends _$ConversationsViewModel {
             MessageModel(
                 role: Role.system,
                 content:
-                    "You are an AI English teacher. Users will talk about something in English. You should talk about it to get the conversation going. Please keep note that you should reply in a couple of friendly sentences. ")
+                    "You are an AI English teacher. Users will talk about something in English. You should talk about it to get the conversation going. Please keep note that you should respond in exactly 1-2 friendly sentences. ")
           ])
     ];
   }
@@ -61,16 +63,19 @@ class ConversationsViewModel extends _$ConversationsViewModel {
     addMessage(Role.assistant, assistantMessage);
   }
 
-  //tts
-  FlutterTts flutterTts = FlutterTts();
-  Future<void> initTts() async {
-    await flutterTts.setLanguage("en-US");
-    await flutterTts.setPitch(1);
-    await flutterTts.setSpeechRate(0.5); //0~1
-  }
-
-  Future<void> speak(text) async {
-    await flutterTts.speak(text);
+  //Google Cloud text to speech
+  final TextToSpeechService ttsService = TextToSpeechService(dotenv.get("GOOGLE_TEXT_TO_SPEECH_API_KEY"));
+  final audioPlayer = AudioPlayer();
+  void speak(text) async {
+    File mp3 = await ttsService.textToSpeech(
+      text: text,
+      voiceName: 'en-US-Wavenet-F',
+      audioEncoding: 'MP3',
+      languageCode: 'en-US',
+      pitch: 0.0,
+      speakingRate: 1.0,
+    );
+    audioPlayer.play(DeviceFileSource(mp3.path));
   }
 
 //stt
@@ -86,10 +91,7 @@ class ConversationsViewModel extends _$ConversationsViewModel {
   }
 
   Future<void> startListening() async {
-    await _speechToText.listen(
-      onResult: onSpeechResult,
-      localeId: "en_US"
-    );
+    await _speechToText.listen(onResult: onSpeechResult, localeId: "en_US");
   }
 
   Future<void> stopListening() async {

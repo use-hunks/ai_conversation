@@ -10,7 +10,6 @@ class ConversationView extends ConsumerWidget {
     final conversations = ref.watch(conversationsViewModelProvider);
     final conversationsNotifer =
         ref.read(conversationsViewModelProvider.notifier);
-    conversationsNotifer.initTts();
     conversationsNotifer.initStt();
     final TextEditingController controller = TextEditingController();
 
